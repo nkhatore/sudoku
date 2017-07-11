@@ -13,21 +13,21 @@ public class Solver {
     private HashSet<Integer> GI13 = new HashSet<>();
     private HashSet<Integer> GI46 = new HashSet<>();
     private HashSet<Integer> GI79 = new HashSet<>();
-    private Coord curr;
-    private Stack<Coord> filledIn;
+    private Cell curr;
+    private Stack<Cell> filledIn;
 
-    private class Coord {
-        public int x;
-        public int y;
-        private Coord(int x, int y) {
+    private class Cell {
+        int x;
+        int y;
+        private Cell(int x, int y) {
             this.x = x;
             this.y = y;
         }
     }
 
-    public Solver() {
-        grid = new int[9][9];
-        curr = new Coord(0,0);
+    private Solver(int[][] grid) {
+        this.grid = grid;
+        curr = new Cell(0,0);
         filledIn = new Stack<>();
         while (curr.y < 9) {
             if (curr.x == 9) {
@@ -36,6 +36,8 @@ public class Solver {
             } else {
                 if (grid[curr.y][curr.x] == 0) {
                     fillCell(1);
+                } else {
+                    addToBox(grid[curr.y][curr.x]);
                 }
                 curr.x++;
             }
@@ -47,7 +49,7 @@ public class Solver {
             if (checkBox(i) && checkRow(i) && checkCol(i)) {
                 grid[curr.y][curr.x] = i;
                 addToBox(i);
-                filledIn.push(new Coord(curr.x, curr.y));
+                filledIn.push(new Cell(curr.x, curr.y));
                 return;
             }
         }
@@ -161,34 +163,20 @@ public class Solver {
         }
     }
 
-    public static void main(String[] args) {
-        Solver sol = new Solver();
-        /*sol.grid[0][0] = 5;
-        sol.grid[0][1] = 4;
-        sol.grid[0][3] = 8;
-        sol.grid[0][7] = 1;
-        sol.grid[1][2] = 7;
-        sol.grid[1][6] = 6;
-        sol.grid[2][0] = 2;
-        sol.grid[2][4] = 5;
-        sol.grid[2][5] = 9;
-        sol.grid[3][0] = 7;
-        sol.grid[3][6] = 1;
-        sol.grid[4][0] = 8;
-        sol.grid[4][3] = 2;
-        sol.grid[4][5] = 5;
-        sol.grid[4][8] = 4;
-        sol.grid[5][2] = 1;
-        sol.grid[5][8] = 6;
-        sol.grid[6][3] = 9;
-        sol.grid[6][4] = 2;
-        sol.grid[6][8] = 5;
-        sol.grid[7][2] = 3;
-        sol.grid[7][6] = 8;
-        sol.grid[8][1] = 7;
-        sol.grid[8][5] = 1;
-        sol.grid[8][1] = 7;
-        sol.grid[8][7] = 4;
-        sol.grid[8][8] = 3;*/
+    private void printGrid() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (j == 3 || j == 6) {
+                    System.out.print("| ");
+                }
+                System.out.print(grid[i][j] + " ");
+                if (j == 8) {
+                   System.out.println();
+                }
+            }
+            if (i == 2 || i == 5) {
+                System.out.println("---------------------");
+            }
+        }
     }
 }
